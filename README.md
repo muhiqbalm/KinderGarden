@@ -1,6 +1,8 @@
 # KinderGarden
+Selamatkan tumbuhan
 
-Muhammad Fadhil Mahendra - 460550
-Muhammad Iqbal Masykuri - 460555
-Muhammad Fatib Abimanyu - NIM
-Fachrizal Bayu Nugroho - 446775
+Kelompok KinderGarde
+Ketua Kelompok: Muhammad Fatin Abimanyu -20/456844/TK/50668
+Anggota 1: Muhammad Fadhil Mahendra - 20/460550/TK/51139
+Anggota 2: Muhammad Iqbal Masykuri - 20/460555/TK/51144
+Anggota 3: Fachrizal Bayu Nugroho - 19/446775/TK/49880
