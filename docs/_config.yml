@@ -3,3 +3,4 @@ plugins:
   - jekyll-remote-theme
 title: KinderGarden
 description: Website Pengidentifikasi Penyakit pada Tanaman menggunakan Image Recognition
+show_downloads: false
