@@ -11,7 +11,7 @@
 
 <br>
 
-**<h3>"Project Senior Project TI"</h3>** 
+### "Project Senior Project TI"</h3>
 Departemen Teknik Elektro dan Teknologi Informasi, Fakultas Teknik, Universitas Gadjah Mada
 
 <hr>
