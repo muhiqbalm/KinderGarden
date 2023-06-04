@@ -1,31 +1,71 @@
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
-const Navbar = () => {
+function NavBar() {
+  const [navbar, setNavbar] = useState(false);
   return (
-    <nav className="bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/">
-              <a className="text-white font-semibold text-lg">Logo</a>
-            </Link>
+    <div>
+      <nav className="w-full bg-[#B4CCAE] fixed top-0 left-0 right-0 z-10">
+        <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
+          <div>
+            <div className="flex items-center justify-between py-3 md:py-5 md:block">
+              {/* LOGO */}
+              <Link href="/home">
+                <h2 className="text-2xl text-cyan-600 font-bold ">
+                  KinderGarden
+                </h2>
+              </Link>
+              {/* HAMBURGER BUTTON FOR MOBILE */}
+              <div className="md:hidden">
+                <button
+                  className="p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border"
+                  onClick={() => setNavbar(!navbar)}
+                >
+                  {navbar ? (
+                    <Image src="/close.svg" width={30} height={30} alt="logo" />
+                  ) : (
+                    <Image
+                      src="/hamburger-menu.svg"
+                      width={30}
+                      height={30}
+                      alt="logo"
+                      className="focus:border-none active:border-none"
+                    />
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex">
-            <Link href="/about">
-              <a className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                About
-              </a>
-            </Link>
-            <Link href="/contact">
-              <a className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                Contact
-              </a>
-            </Link>
+          <div>
+            <div
+              className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
+                navbar ? "p-12 md:p-0 block" : "hidden"
+              }`}
+            >
+              <ul className="h-screen md:h-auto items-center justify-center md:flex ">
+                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
+                  <Link href="/home" onClick={() => setNavbar(!navbar)}>
+                    Dashboard
+                  </Link>
+                </li>
+                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
+                  <Link href="upload" onClick={() => setNavbar(!navbar)}>
+                    Upload
+                  </Link>
+                </li>
+                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
+                  <Link href="riwayat" onClick={() => setNavbar(!navbar)}>
+                    Riwayat
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
-};
+}
 
-export default Navbar;
+export default NavBar;
