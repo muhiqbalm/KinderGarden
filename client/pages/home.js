@@ -1,5 +1,6 @@
 import React from "react";
+import Landingpage from "../components/landingpage";
 
 export default function home() {
-  return <div>home</div>;
+  return <Landingpage />;
 }
