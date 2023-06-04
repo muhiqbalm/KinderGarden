@@ -45,17 +45,17 @@ function NavBar() {
             >
               <ul className="h-screen md:h-auto items-center justify-center md:flex ">
                 <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
-                  <Link href="/home" onClick={() => setNavbar(!navbar)}>
+                  <Link href="/" onClick={() => setNavbar(!navbar)}>
                     Dashboard
                   </Link>
                 </li>
                 <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
-                  <Link href="upload" onClick={() => setNavbar(!navbar)}>
+                  <Link href="/upload" onClick={() => setNavbar(!navbar)}>
                     Upload
                   </Link>
                 </li>
                 <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
-                  <Link href="riwayat" onClick={() => setNavbar(!navbar)}>
+                  <Link href="/riwayat" onClick={() => setNavbar(!navbar)}>
                     Riwayat
                   </Link>
                 </li>
