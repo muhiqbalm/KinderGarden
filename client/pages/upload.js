@@ -4,17 +4,44 @@ import Navbar from "../components/navbar.js";
 
 export default function upload() {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showedImage, setShowedImage] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [prediction, setPrediction] = useState(null);
+  const [confidence, setConfidence] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedImage(URL.createObjectURL(file));
+      setSelectedImage(file);
+      setShowedImage(URL.createObjectURL(file));
     }
   };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    if (selectedImage) {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+
+      const response = await fetch("http://127.0.0.1:5000/data", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      setPrediction(data.predict);
+      setConfidence(data.confidence);
+    }
+  };
+
+  // cek apakah selectedImage masuk
+  useEffect(() => {
+    console.log(selectedImage);
+  }, [selectedImage]);
 
   useEffect(() => {
     let stream = null;
@@ -82,6 +109,7 @@ export default function upload() {
 
   const handleStopCamera = () => {
     setSelectedImage(null);
+    setShowedImage(null);
     setIsCameraActive(false);
   };
 
@@ -106,33 +134,35 @@ export default function upload() {
     const dataUrl = canvas.toDataURL("image/png");
 
     // Set the captured image as the selected image
-    setSelectedImage(dataUrl);
+    // setSelectedImage(dataUrl);
+    setShowedImage(dataUrl);
     setIsCameraActive(false);
   };
 
   const handleRemoveImageClick = () => {
     setSelectedImage(null);
+    setShowedImage(null);
     setIsDeleted(true);
   };
 
   return (
     <>
-      <Navbar />
-      <div className="container px-4 md:px-10 lg:px-40 py-8 flex flex-col">
+      <Navbar menu={"upload"} />
+      <div className="container px-4 md:px-10 lg:px-40 py-8 flex flex-col h-full justify-center">
         <p className="text-2xl font-bold mb-4 text-black text-center">
           Image Upload
         </p>
         <div className="mb-4">
-          {selectedImage ? (
+          {showedImage ? (
             <div className="relative">
               <img
-                src={selectedImage}
+                src={showedImage}
                 alt="Selected"
                 className="w-full max-w-md mx-auto"
               />
               <button
                 onClick={handleRemoveImageClick}
-                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full"
+                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-800 transform transition duration-300"
               >
                 Remove
               </button>
@@ -147,7 +177,7 @@ export default function upload() {
             </div>
           )}
         </div>
-        <div className="mb-4">
+        <div className="">
           <label htmlFor="fileInput" className="block mb-2">
             Upload Image:
           </label>
@@ -156,26 +186,29 @@ export default function upload() {
             id="fileInput"
             accept="image/*"
             onChange={handleFileInputChange}
-            className="border p-2"
+            className="border border-slate-200 shadow-md p-3"
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 h-full">
           {isCameraActive && isDeleted !== true && (
-            <div className="relative">
+            <div className="relative h-full">
               <canvas
                 ref={canvasRef}
                 className="w-full h-full"
-                style={{ position: "absolute", top: 0, left: 0 }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  height: "100%",
+                }}
               ></canvas>
             </div>
           )}
         </div>
-
         <div className="flex">
           {isCameraActive && isDeleted !== true && (
             <button
               onClick={handleCaptureImageClick}
-              className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+              className="bg-green-500 text-white px-4 py-2 rounded mr-2 hover:bg-green-800 transform transition duration-300"
             >
               Capture
             </button>
@@ -184,7 +217,7 @@ export default function upload() {
           {isCameraActive ? (
             <button
               onClick={handleStopCamera}
-              className={`bg-red-500 text-white px-4 py-2 rounded mr-2`}
+              className={`bg-red-500 text-white px-4 py-2 rounded mr-2 hover:bg-red-800 transform transition duration-300`}
             >
               Stop Camera
             </button>
@@ -192,10 +225,28 @@ export default function upload() {
             <button
               disabled={selectedImage === null ? false : true}
               onClick={handleTakeImageClick}
-              className={`bg-blue-500 text-white px-4 py-2 rounded mr-2`}
+              className={`bg-cyan-600 text-white px-4 py-2 rounded mr-2 hover:bg-cyan-800 transform transition duration-300`}
             >
               Start Camera
             </button>
+          )}
+          {selectedImage !== null ? (
+            <button
+              onClick={handleFormSubmit}
+              className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-800 transform transition duration-300`}
+            >
+              Predict
+            </button>
+          ) : (
+            <></>
+          )}
+          {prediction !== null ? (
+            <div className="flex flex-col">
+              <h2>Prediction: {prediction}</h2>
+              <h2>Confidence: {confidence}%</h2>
+            </div>
+          ) : (
+            <p>prediksi belum dilakukan</p>
           )}
         </div>
       </div>

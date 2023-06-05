@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
-function NavBar() {
+function NavBar(props) {
   const [navbar, setNavbar] = useState(false);
   return (
     <div>
@@ -43,19 +43,33 @@ function NavBar() {
                 navbar ? "p-12 md:p-0 block" : "hidden"
               }`}
             >
-              <ul className="h-screen md:h-auto items-center justify-center md:flex ">
-                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
+              <ul className="h-screen md:h-auto gap-2 items-center justify-center md:flex ">
+                <li
+                  className={`${
+                    props.menu === "dashboard"
+                      ? "bg-white"
+                      : "hover:bg-green-200"
+                  } text-black font-bold py-2 px-4 rounded-full`}
+                >
                   <Link href="/" onClick={() => setNavbar(!navbar)}>
                     Dashboard
                   </Link>
                 </li>
-                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
-                  <Link href="/upload" onClick={() => setNavbar(!navbar)}>
+                <li
+                  className={`${
+                    props.menu === "upload" ? "bg-white" : "hover:bg-green-200"
+                  } text-black font-bold py-2 px-4 rounded-full`}
+                >
+                  <Link href="upload" onClick={() => setNavbar(!navbar)}>
                     Upload
                   </Link>
                 </li>
-                <li className=" hover:bg-white text-black font-bold py-2 px-4 rounded-full">
-                  <Link href="/riwayat" onClick={() => setNavbar(!navbar)}>
+                <li
+                  className={`${
+                    props.menu === "history" ? "bg-white" : "hover:bg-green-200"
+                  } text-black font-bold py-2 px-4 rounded-full`}
+                >
+                  <Link href="riwayat" onClick={() => setNavbar(!navbar)}>
                     Riwayat
                   </Link>
                 </li>
