@@ -6,8 +6,8 @@ import Tomat from "../public/assets/tomat.svg";
 export default function Landingpage() {
   return (
     <>
-      <div className="z-10 h-full md:h-[100vh] bg-[#EDEDED] px-[50px] py-[50px] md:px-[100px] xl:px-[200px] xl:pb-[100px] flex flex-col-reverse md:grid md:grid-cols-2 md:gap-[100px] lg:gap-[200px] items-center">
-        <div className=" flex flex-col text-black  justify-center">
+      <div className="z-10 h-full md:h-[100vh] bg-[#EDEDED] px-[50px] py-[50px] lg:px-40 md:px-10 xl:pb-[100px] flex flex-col-reverse md:grid md:grid-cols-2 md:gap-[100px] lg:gap-[200px] items-center ">
+        <div className=" flex flex-col text-black  justify-center lg:pr-10">
           <p className="text-3xl leading-normal font-bold lg:text-4xl lg:leading-normal">
             Deteksi Penyakit
           </p>
@@ -32,7 +32,7 @@ export default function Landingpage() {
           </Link>
         </div>
         <Image
-          className="z-8 p-5 pt-0 md:p-0 xl:pt-30 xl:pb-0 xl:pr-0"
+          className="z-8 p-5 pt-0 w-[50vw] md:w-max md:p-0 xl:pt-30 xl:pb-0 xl:pr-0"
           src={Tomat}
           alt=""
           width={1000}
