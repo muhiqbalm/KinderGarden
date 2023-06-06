@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Link from "next/link";
 
 const Modal = ({ isOpen, prediction, confidence, url, setIsOpen }) => {
   if (isOpen == false) return null;
@@ -50,7 +50,9 @@ const Modal = ({ isOpen, prediction, confidence, url, setIsOpen }) => {
             <p className="text-slate-500 text-center mb-6">{deskripsi}</p>
             <div className="flex flex-col space-y-3 md:space-y-0 md:space-x-6 md:flex-row">
               <button className="bg-slate-400 py-1 px-8 text-white font-bold text-lg rounded-full hover:bg-slate-500">
-                RIWAYAT
+                <Link href="/riwayat" onClick={() => setNavbar(!navbar)}>
+                  RIWAYAT
+                </Link>
               </button>
               <button
                 className="bg-white border border-slate-400 py-1 px-8 text-slate-400 font-bold text-lg rounded-full hover:bg-gray-200"
