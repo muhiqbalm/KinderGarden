@@ -51,7 +51,9 @@ const RiwayatTable = () => {
                 {item.hasil}
               </td>
               <td className="px-6 py-4 border-2 border-[#588534]  whitespace-nowrap text-sm text-gray-500">
-                <button>Detail</button>
+                <button class="bg-[#B14646] hover:bg-[#588534] text-white font-bold py-2 px-4 rounded-full ">
+                  Detail
+                </button>
               </td>
             </tr>
           );
