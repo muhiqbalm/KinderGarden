@@ -294,7 +294,7 @@ export default function upload() {
             </div>
           )}
         </div>
-        <div className="flex flex-col space-y-3 md:flex-row">
+        <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row">
           {isCameraActive && isDeleted !== true && (
             <button
               onClick={handleCaptureImageClick}
@@ -329,14 +329,6 @@ export default function upload() {
             </button>
           ) : (
             <></>
-          )}
-          {prediction !== null ? (
-            <div className="flex flex-col">
-              <h2>Prediction: {prediction}</h2>
-              <h2>Confidence: {confidence}%</h2>
-            </div>
-          ) : (
-            <p>prediksi belum dilakukan</p>
           )}
         </div>
       </div>
