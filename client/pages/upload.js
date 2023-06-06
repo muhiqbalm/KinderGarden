@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "../components/navbar.js";
+import Loading from "@/components/loading.js";
+import Cookies from "js-cookie";
+import firebase from "firebase/app";
+import { storage } from "../firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import "firebase/storage";
+import { v4 } from "uuid";
 
 export default function upload() {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -9,6 +16,7 @@ export default function upload() {
   const [prediction, setPrediction] = useState(null);
   const [confidence, setConfidence] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageURL, setImageURL] = useState("");
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -18,6 +26,23 @@ export default function upload() {
       setSelectedImage(file);
       setShowedImage(URL.createObjectURL(file));
     }
+  };
+
+  const imageUpload = () => {
+    if (selectedImage == null) return;
+    const imageRef = ref(storage, `images/${selectedImage.name + v4()}`);
+    uploadBytes(imageRef, selectedImage)
+      .then(() => {
+        // Get the download URL of the uploaded image
+        return getDownloadURL(imageRef);
+      })
+      .then((downloadURL) => {
+        const URL = downloadURL.toString();
+        setImageURL(URL);
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
   };
 
   const handleFormSubmit = async (event) => {
@@ -38,6 +63,7 @@ export default function upload() {
         const data = await response.json();
         setPrediction(data.predict);
         setConfidence(data.confidence);
+        imageUpload();
       } catch (error) {
         console.error(error);
       }
@@ -138,13 +164,18 @@ export default function upload() {
       videoRef.current.videoHeight
     );
 
-    // Convert the canvas image to a data URL
-    const dataUrl = canvas.toDataURL("image/png");
+    // Convert the canvas image to a Blob
+    canvas.toBlob((blob) => {
+      // Create a file object from the Blob
+      const file = new File([blob], "captured-image.png", {
+        type: "image/png",
+      });
 
-    // Set the captured image as the selected image
-    // setSelectedImage(dataUrl);
-    setShowedImage(dataUrl);
-    setIsCameraActive(false);
+      // Set the captured image as the selected image
+      setSelectedImage(file);
+      setShowedImage(URL.createObjectURL(file));
+      setIsCameraActive(false);
+    }, "image/png");
   };
 
   const handleRemoveImageClick = () => {
@@ -155,11 +186,17 @@ export default function upload() {
 
   return (
     <>
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center backdrop-blur-md justify-center z-50 bg-black bg-opacity-50">
+          <Loading />
+        </div>
+      )}
       <Navbar menu={"upload"} />
       <div className="container px-4 md:px-10 lg:px-40 py-8 flex flex-col h-full justify-center">
         <p className="text-2xl font-bold mb-4 text-black text-center">
           Image Upload
         </p>
+        {imageURL && <p>{imageURL}</p>}
         <div className="mb-4">
           {showedImage ? (
             <div className="relative">
