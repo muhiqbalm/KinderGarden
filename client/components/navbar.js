@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import hamburger from "../assets/hamburger-menu.svg";
+import close from "../assets/close.png";
 
 function NavBar(props) {
   const [navbar, setNavbar] = useState(false);
@@ -23,10 +25,10 @@ function NavBar(props) {
                   onClick={() => setNavbar(!navbar)}
                 >
                   {navbar ? (
-                    <Image src="/close.svg" width={30} height={30} alt="logo" />
+                    <Image src={close} width={30} height={30} alt="logo" />
                   ) : (
                     <Image
-                      src="/hamburger-menu.svg"
+                      src={hamburger}
                       width={30}
                       height={30}
                       alt="logo"
