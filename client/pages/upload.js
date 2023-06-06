@@ -4,6 +4,7 @@ import Loading from "@/components/loading.js";
 import { useCookies } from "react-cookie";
 import { storage } from "../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Modal from "@/components/modal.js";
 import "firebase/storage";
 import { v4 } from "uuid";
 
@@ -76,6 +77,7 @@ export default function upload() {
 
             // Mengatur cookie baru dengan data yang diperbarui
             setCookie("history", newCookies);
+            setIsModalOpen(true);
           })
           .catch((error) => {
             console.error("Error uploading image:", error);
@@ -227,6 +229,13 @@ export default function upload() {
         </div>
       )}
       <Navbar menu={"upload"} />
+      <Modal
+        prediction={prediction}
+        confidence={confidence}
+        isOpen={isModalOpen}
+        url={imageURL}
+        setIsOpen={setIsModalOpen}
+      />
       <div className="px-4 md:px-10 lg:px-40 py-8 flex flex-col h-full w-full justify-center">
         <p className="text-2xl font-bold mb-4 text-[#588534] text-center">
           Upload Your Image!
