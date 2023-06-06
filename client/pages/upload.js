@@ -9,6 +9,7 @@ export default function upload() {
   const [isDeleted, setIsDeleted] = useState(false);
   const [prediction, setPrediction] = useState(null);
   const [confidence, setConfidence] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -27,14 +28,22 @@ export default function upload() {
       const formData = new FormData();
       formData.append("file", selectedImage);
 
-      const response = await fetch("http://127.0.0.1:5000/data", {
-        method: "POST",
-        body: formData,
-      });
+      setIsLoading(true); // Aktifkan loader
 
-      const data = await response.json();
-      setPrediction(data.predict);
-      setConfidence(data.confidence);
+      try {
+        const response = await fetch("http://127.0.0.1:5000/data", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        setPrediction(data.predict);
+        setConfidence(data.confidence);
+      } catch (error) {
+        console.error(error);
+      }
+
+      setIsLoading(false); // Matikan loader setelah selesai
     }
   };
 
