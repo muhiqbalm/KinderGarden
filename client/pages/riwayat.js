@@ -18,7 +18,7 @@ export default function Riwayat() {
         <div className="fixed top-0 left-0 w-full h-full flex items-center backdrop-blur-md justify-center z-50 bg-black bg-opacity-50">
           <img src={image} alt={"uploaded"} style={{ width: "600px" }} />
           <button
-            className="absolute top-10 right-10 text-white px-2 py-1 hover:text-blue-400 transform transition duration-300"
+            className="absolute top-10 right-10 text-white px-2 py-1 hover:text-red-500 transform transition duration-300"
             onClick={() => setImage(null)}
           >
             <FaWindowClose className="scale-150" />
