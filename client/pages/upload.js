@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import Landingpage from "../components/landingpage.js";
 import Navbar from "../components/navbar.js";
 
 export default function upload() {
