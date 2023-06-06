@@ -1,4 +1,5 @@
 import React from "react";
+import { FaEye } from "react-icons/fa";
 
 const RiwayatTable = () => {
   const data = [
@@ -20,16 +21,16 @@ const RiwayatTable = () => {
           <th className="px-6 py-3 border-2 border-black bg-[#588534]  text-left text-2xl font-medium text-white tracking-wider">
             No
           </th>
-          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-left text-2xl font-medium text-white tracking-wider">
+          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-center text-2xl font-medium text-white tracking-wider">
             Tanggal
           </th>
-          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-left text-2xl font-medium text-white tracking-wider">
+          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-center text-2xl font-medium text-white tracking-wider">
             Nama File
           </th>
-          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-left text-2xl font-medium text-white tracking-wider">
+          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-center text-2xl font-medium text-white tracking-wider">
             Hasil
           </th>
-          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-left text-2xl font-medium text-white tracking-wider">
+          <th className="px-6 py-3 border-2 border-black bg-[#588534] text-center text-2xl font-medium text-white tracking-wider">
             Aksi
           </th>
         </tr>
@@ -47,12 +48,13 @@ const RiwayatTable = () => {
               <td className="px-6 py-4 border-2 border-[#588534] whitespace-nowrap text-sm text-gray-500">
                 {item.namafile}
               </td>
-              <td className="px-6 py-4 border-2 border-[#588534] whitespace-nowrap text-sm text-gray-500">
+              <td className="px-6 py-4 border-2  border-[#588534] whitespace-nowrap text-sm text-gray-500">
                 {item.hasil}
               </td>
-              <td className="px-6 py-4 border-2 border-[#588534]  whitespace-nowrap text-sm text-gray-500">
-                <button class="bg-[#B14646] hover:bg-[#588534] text-white font-bold py-2 px-4 rounded-full ">
-                  Detail
+              <td className="px-6 py-4 border-2 flex justify-center border-[#588534]  whitespace-nowrap text-sm text-gray-500">
+                <button class="bg-[#B14646] flex items-center hover:bg-[#588534] text-white font-bold py-2 px-4 rounded-full ">
+                  <FaEye className="mr-3" />
+                  Lihat Gambar
                 </button>
               </td>
             </tr>
