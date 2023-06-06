@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Tomat from "../assets/tomat.svg";
+import Tomat from "../public/assets/tomat.svg";
 
 export default function Landingpage() {
   return (

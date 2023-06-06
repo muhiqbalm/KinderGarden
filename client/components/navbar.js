@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import hamburger from "../assets/hamburger-menu.svg";
-import close from "../assets/close.png";
-import logo from "../assets/logo.png";
+import hamburger from "../public/assets/hamburger-menu.svg";
+import close from "../public/assets/close.png";
+import logo from "../public/assets/logo.svg";
 
 function NavBar(props) {
   const [navbar, setNavbar] = useState(false);
@@ -16,7 +16,13 @@ function NavBar(props) {
               {/* LOGO */}
               <Link href="/">
                 <h2 className="text-2xl text-cyan-600 font-bold ">
-                  <Image src={logo} width={200} height={200} alt="logo" />
+                  <Image
+                    src={logo}
+                    width={200}
+                    height={200}
+                    className="scale-75 md:scale-100"
+                    alt="logo"
+                  />
                 </h2>
               </Link>
               {/* HAMBURGER BUTTON FOR MOBILE */}

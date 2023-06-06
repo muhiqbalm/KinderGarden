@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = ({ isOpen, onClose }) => {
+const Modal = ({ isOpen, onClose, prediction, confidence, url }) => {
   if (!isOpen) return null;
 
   return (

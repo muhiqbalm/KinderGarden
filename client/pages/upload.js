@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "../components/navbar.js";
 import Loading from "@/components/loading.js";
-import Cookies from "js-cookie";
-import firebase from "firebase/app";
+import { useCookies } from "react-cookie";
 import { storage } from "../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import "firebase/storage";
@@ -17,6 +16,9 @@ export default function upload() {
   const [confidence, setConfidence] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imageURL, setImageURL] = useState("");
+  const [myState, setMyState] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cookies, setCookie] = useCookies(["history"]);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -28,25 +30,11 @@ export default function upload() {
     }
   };
 
-  const imageUpload = () => {
-    if (selectedImage == null) return;
-    const imageRef = ref(storage, `images/${selectedImage.name + v4()}`);
-    uploadBytes(imageRef, selectedImage)
-      .then(() => {
-        // Get the download URL of the uploaded image
-        return getDownloadURL(imageRef);
-      })
-      .then((downloadURL) => {
-        const URL = downloadURL.toString();
-        setImageURL(URL);
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
-  };
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+
+    if (selectedImage == null) return;
+    const imageRef = ref(storage, `images/${selectedImage.name + v4()}`);
 
     if (selectedImage) {
       const formData = new FormData();
@@ -55,15 +43,44 @@ export default function upload() {
       setIsLoading(true); // Aktifkan loader
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/data", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "https://kinder-garden.azurewebsites.net/data",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         const data = await response.json();
         setPrediction(data.predict);
         setConfidence(data.confidence);
-        imageUpload();
+        uploadBytes(imageRef, selectedImage)
+          .then(() => {
+            // Get the download URL of the uploaded image
+            return getDownloadURL(imageRef);
+          })
+          .then((downloadURL) => {
+            const URL = downloadURL.toString();
+            setImageURL(URL);
+            // addHistory();
+
+            const cookieData = {
+              prediction: data.predict,
+              confidence: data.confidence,
+              imageURL: downloadURL.toString(),
+            };
+
+            // Mendapatkan array cookies lama dan menambahkan URL baru
+            const oldCookies = cookies["history"] || []; // Using default value [] if cookies is empty
+            const newCookies = [...oldCookies, cookieData];
+
+            // Mengatur cookie baru dengan data yang diperbarui
+            setCookie("history", newCookies);
+          })
+          .catch((error) => {
+            console.error("Error uploading image:", error);
+          });
+        // addHistory();
       } catch (error) {
         console.error(error);
       }
@@ -141,6 +158,13 @@ export default function upload() {
     }
   };
 
+  useEffect(() => {
+    if (videoRef.current) {
+      const videoElement = videoRef.current;
+      videoElement.style.transform = "scaleX(-1)";
+    }
+  }, []);
+
   const handleStopCamera = () => {
     setSelectedImage(null);
     setShowedImage(null);
@@ -164,14 +188,25 @@ export default function upload() {
       videoRef.current.videoHeight
     );
 
-    // Convert the canvas image to a Blob
-    canvas.toBlob((blob) => {
+    // Create a temporary canvas for mirroring
+    const tempCanvas = document.createElement("canvas");
+    const tempContext = tempCanvas.getContext("2d");
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+
+    // Mirror the image on the temporary canvas
+    tempContext.translate(canvas.width, 0);
+    tempContext.scale(-1, 1);
+    tempContext.drawImage(canvas, 0, 0);
+
+    // Convert the mirrored image on the temporary canvas to a Blob
+    tempCanvas.toBlob((blob) => {
       // Create a file object from the Blob
       const file = new File([blob], "captured-image.png", {
         type: "image/png",
       });
 
-      // Set the captured image as the selected image
+      // Set the mirrored captured image as the selected image
       setSelectedImage(file);
       setShowedImage(URL.createObjectURL(file));
       setIsCameraActive(false);
@@ -192,11 +227,12 @@ export default function upload() {
         </div>
       )}
       <Navbar menu={"upload"} />
-      <div className="container px-4 md:px-10 lg:px-40 py-8 flex flex-col h-full justify-center">
-        <p className="text-2xl font-bold mb-4 text-black text-center">
-          Image Upload
+      <div className="px-4 md:px-10 lg:px-40 py-8 flex flex-col h-full w-full justify-center">
+        <p className="text-2xl font-bold mb-4 text-[#588534] text-center">
+          Upload Your Image!
         </p>
-        {imageURL && <p>{imageURL}</p>}
+        {/* {imageURL && <p>{imageURL}</p>} */}
+
         <div className="mb-4">
           {showedImage ? (
             <div className="relative">
@@ -216,7 +252,7 @@ export default function upload() {
             <div className="bg-gray-200 h-64 flex items-center justify-center">
               <video
                 ref={videoRef}
-                className="w-full h-full object-cover"
+                className="w-screen h-full object-fit"
                 autoPlay
               ></video>
             </div>
@@ -249,7 +285,7 @@ export default function upload() {
             </div>
           )}
         </div>
-        <div className="flex">
+        <div className="flex flex-col space-y-3 md:flex-row">
           {isCameraActive && isDeleted !== true && (
             <button
               onClick={handleCaptureImageClick}
@@ -270,7 +306,7 @@ export default function upload() {
             <button
               disabled={selectedImage === null ? false : true}
               onClick={handleTakeImageClick}
-              className={`bg-cyan-600 text-white px-4 py-2 rounded mr-2 hover:bg-cyan-800 transform transition duration-300`}
+              className={`bg-cyan-600 text-white px-4 py-2 rounded md:mr-2 hover:bg-cyan-800 transform transition duration-300`}
             >
               Start Camera
             </button>
@@ -278,7 +314,7 @@ export default function upload() {
           {selectedImage !== null ? (
             <button
               onClick={handleFormSubmit}
-              className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-800 transform transition duration-300`}
+              className={`bg-blue-500 text-white px-4 py-2 rounded md:mr-2 hover:bg-blue-800 transform transition duration-300`}
             >
               Predict
             </button>
