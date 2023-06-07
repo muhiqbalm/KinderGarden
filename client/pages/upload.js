@@ -77,9 +77,6 @@ export default function upload() {
 
             // Mengatur cookie baru dengan data yang diperbarui
             setCookie("history", newCookies);
-          })
-          .then(() => {
-            // Get the download URL of the uploaded image
             setIsModalOpen(true);
           })
           .catch((error) => {
