@@ -77,7 +77,10 @@ export default function upload() {
 
             // Mengatur cookie baru dengan data yang diperbarui
             setCookie("history", newCookies);
-            setIsModalOpen(true);
+          })
+          .then(() => {
+            // Get the download URL of the uploaded image
+            return setIsModalOpen(true);
           })
           .catch((error) => {
             console.error("Error uploading image:", error);
